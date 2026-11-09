@@ -83,8 +83,11 @@ func (a *Adapter) getSource(dbName string) string {
 		}
 		return source + dbName
 	case "postgres":
-		if dbName == "" {
+		if dbName == "" || dbName == "/app/data/casnode.db" {
 			dbName = "postgres"
+		}
+		if strings.HasPrefix(a.dataSourceName, "postgres://") || strings.HasPrefix(a.dataSourceName, "postgresql://") {
+			return a.dataSourceName
 		}
 		return fmt.Sprintf("%s dbname=%s", a.dataSourceName, dbName)
 	case "mssql":
@@ -117,6 +120,9 @@ func (a *Adapter) createDatabase() error {
 	case "mysql":
 		_, err = engine.Exec(fmt.Sprintf("CREATE DATABASE IF NOT EXISTS `%s` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci", a.dbName))
 	case "postgres":
+		if a.dbName == "postgres" || a.dbName == "" || a.dbName == "/app/data/casnode.db" || strings.HasPrefix(a.dataSourceName, "postgres://") || strings.HasPrefix(a.dataSourceName, "postgresql://") {
+			return nil
+		}
 		var count int64
 		_, err = engine.SQL("SELECT COUNT(*) FROM pg_database WHERE datname = ?", a.dbName).Get(&count)
 		if err == nil && count == 0 {
