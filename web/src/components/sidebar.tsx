@@ -221,8 +221,8 @@ export function Sidebar() {
                 </option>
               ))}
             </select>
-            <a href="https://github.com/casnode/casnode" target="_blank" rel="noopener" className="ml-auto">
-              {t("common.poweredBy")}
+            <a href="https://www.makerspell.com" target="_blank" rel="noopener" className="ml-auto text-xs opacity-75 hover:opacity-100 hover:text-[var(--tertiary)]">
+              makerspell.com
             </a>
           </div>
         </div>

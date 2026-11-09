@@ -41,7 +41,7 @@ export default async function Page() {
   const site = await getSite();
   const res = await serverGet<About>("get-about");
   const about = res.data;
-  const title = site.settings.title || "Casnode";
+  const title = site.settings.title && site.settings.title !== "Casnode" ? site.settings.title : "MakerSpell Community";
   return (
     <div className="about-page">
       <h1 className="page-title">

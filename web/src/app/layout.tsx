@@ -20,16 +20,16 @@ import "./features.css";
 
 export async function generateMetadata(): Promise<Metadata> {
   const site = await getSite();
-  const title = site.settings.title || "Casnode";
+  const title = site.settings.title && site.settings.title !== "Casnode" ? site.settings.title : "MakerSpell Community";
   const origin = await getOrigin();
   return {
     metadataBase: new URL(origin),
     title: { default: title, template: `%s - ${title}` },
-    description: site.settings.site_description,
+    description: site.settings.site_description || "MakerSpell Community - 3D Printing, Hardware, Models & Innovation",
     applicationName: title,
-    icons: { icon: site.settings.favicon_url || "/favicon.svg" },
+    icons: { icon: site.settings.favicon_url || "/favicon.ico" },
     alternates: { types: { "application/rss+xml": `${origin}/latest.rss` } },
-    openGraph: { siteName: title, type: "website", images: site.settings.logo_url ? [site.settings.logo_url] : undefined },
+    openGraph: { siteName: title, type: "website", images: site.settings.logo_url ? [site.settings.logo_url] : ["/brand-logo.png"] },
     formatDetection: { telephone: false },
   };
 }

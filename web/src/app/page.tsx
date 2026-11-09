@@ -6,7 +6,7 @@ import { getSite } from "@/lib/server-api";
 
 export async function generateMetadata(): Promise<Metadata> {
   const site = await getSite();
-  const title = site.settings.title || "Casnode";
+  const title = site.settings.title && site.settings.title !== "Casnode" ? site.settings.title : "MakerSpell Community";
   return {
     title: { absolute: site.settings.short_site_description ? `${title} - ${site.settings.short_site_description}` : title },
     alternates: { canonical: "/" },
@@ -22,7 +22,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<Rec
   return (
     <>
       <HomepageBanner />
-      {site.settings.homepage_banner_title ? null : <h1 className="sr-only">{site.settings.title || "Casnode"}</h1>}
+      {site.settings.homepage_banner_title ? null : <h1 className="sr-only">MakerSpell Community</h1>}
       {first === "categories" ? <CategoriesPage /> : <ListPage filter={filter} page={parsePage(params.page)} period={firstParam(params.period)} />}
     </>
   );

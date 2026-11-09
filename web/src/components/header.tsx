@@ -40,14 +40,15 @@ export function SiteHeader() {
     };
   }, [panel]);
 
-  const title = settings.title || "Casnode";
-  const logo = settings.logo_url;
+  const title = settings.title && settings.title !== "Casnode" ? settings.title : "MakerSpell Community";
+  const logo = settings.logo_url || "/brand-logo.png";
   const counts = site.counts ?? {};
   const unread = counts.notifications ?? 0;
   const highPriority = counts.highPriorityNotifications ?? 0;
   const topicCategory = headerTopic ? categoryById(headerTopic.categoryId) : undefined;
   // header_links is "Label,URL|Label,URL", like Discourse's custom header links
-  const headerLinks = (settings.header_links || "")
+  const rawLinks = settings.header_links || "MakerSpell.com,https://www.makerspell.com|Modeller,https://www.makerspell.com/browse|Fırsatlar,https://www.makerspell.com/deals";
+  const headerLinks = rawLinks
     .split("|")
     .map((item) => {
       const comma = item.indexOf(",");
@@ -72,13 +73,12 @@ export function SiteHeader() {
               </button>
             </span>
             <div className="title">
-              <Link href="/" aria-label={title}>
-                {logo ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={logo} alt={title} className="logo-big" />
-                ) : (
-                  <span className="site-title-text">{title}</span>
-                )}
+              <Link href="/" aria-label={title} className="flex items-center gap-2.5">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={logo} alt={title} className="logo-big h-8 w-auto max-h-8 object-contain" />
+                <span className="site-title-text font-bold text-lg tracking-tight bg-gradient-to-r from-blue-400 via-indigo-400 to-pink-400 bg-clip-text text-transparent">
+                  MakerSpell
+                </span>
               </Link>
             </div>
             {headerTopic ? (

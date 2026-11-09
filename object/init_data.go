@@ -46,13 +46,17 @@ func InitData() {
 	}
 
 	categories := []*Category{
-		{Name: "Uncategorized", Slug: "uncategorized", Color: "0088CC", TextColor: "FFFFFF", Position: 1,
-			Description: "Topics that don't need a category, or don't fit into any other existing category."},
-		{Name: "General", Slug: "general", Color: "25AAE2", TextColor: "FFFFFF", Position: 2,
-			Description: "Create topics here that don't fit into any other existing category."},
-		{Name: "Site Feedback", Slug: "site-feedback", Color: "808281", TextColor: "FFFFFF", Position: 3,
-			Description: "Discussion about this site, its organization, how it works, and how we can improve it."},
-		{Name: "Staff", Slug: "staff", Color: "E45735", TextColor: "FFFFFF", Position: 4, ReadRestricted: true,
+		{Name: "General", Slug: "general", Color: "3B82F6", TextColor: "FFFFFF", Position: 1,
+			Description: "General discussions about 3D printing, making, and technology."},
+		{Name: "3D Printers & Hardware", Slug: "hardware", Color: "10B981", TextColor: "FFFFFF", Position: 2,
+			Description: "Hardware setups, Creality K1, Snapmaker U1, Bambu Lab, Voron, modifications, and troubleshooting."},
+		{Name: "Slicers & Software", Slug: "software", Color: "8B5CF6", TextColor: "FFFFFF", Position: 3,
+			Description: "OrcaSlicer, Klipper, Moonraker, OctoPrint, CAD, and slicing tips."},
+		{Name: "Models & Showcases", Slug: "showcase", Color: "EC4899", TextColor: "FFFFFF", Position: 4,
+			Description: "Share your 3D prints, custom designs, and creative maker projects."},
+		{Name: "Site Feedback & Ideas", Slug: "site-feedback", Color: "64748B", TextColor: "FFFFFF", Position: 5,
+			Description: "Discussion about MakerSpell and MakerSync apps, features, and roadmap."},
+		{Name: "Staff", Slug: "staff", Color: "EF4444", TextColor: "FFFFFF", Position: 6, ReadRestricted: true,
 			Description: "Private category for staff discussions. Topics are only visible to admins and moderators."},
 	}
 	for _, category := range categories {
@@ -66,21 +70,23 @@ func InitData() {
 	if err != nil {
 		panic(err)
 	}
-	err = SetSiteSetting("staff_category_id", strconv.FormatInt(categories[3].Id, 10))
+	err = SetSiteSetting("staff_category_id", strconv.FormatInt(categories[5].Id, 10))
 	if err != nil {
 		panic(err)
 	}
 
-	raw := fmt.Sprintf(`We're glad you're here! This is our community, where you can connect, ask questions and share ideas.
+	raw := fmt.Sprintf(`Welcome to the **MakerSpell Community**! 🚀
 
-Here are some things you can do to get started:
+This is the gathering place for 3D printing enthusiasts, makers, hardware hackers, and creators worldwide.
 
-- **Introduce yourself** by adding your picture and information about yourself and your interests to your profile.
-- **Get to know the community** by browsing discussions that are already happening here. When you find a post interesting, informative, or entertaining, use the :heart: to show your appreciation or support!
-- **Contribute** by commenting, sharing your own perspective, asking questions, or offering feedback in the discussion. Before replying or starting new topics, please review the [Community Guidelines](/faq).
+### 🌟 What can you do here?
+- **Showcase Your Prints:** Share your latest 3D prints and models in [Models & Showcases](/c/showcase/%d).
+- **Hardware & Troubleshooting:** Ask questions and share tips for your Klipper, Creality, Snapmaker, Bambu, or Voron machines in [3D Printers & Hardware](/c/hardware/%d).
+- **Slicing & Optimization:** Discuss profiles, slicer settings, and OrcaSlicer integration in [Slicers & Software](/c/software/%d).
+- **MakerSpell & MakerSync Feedback:** Give feedback and feature requests in [Site Feedback](/c/site-feedback/%d).
 
-> If you need help or have a suggestion, feel free to ask in [Site Feedback](/c/site-feedback/%d).`, categories[2].Id)
-	topic, err := CreateTopic(system, &NewTopic{Title: "Welcome to our community!", Raw: raw, CategoryId: categories[1].Id})
+> Visit [MakerSpell.com](https://www.makerspell.com) to search over 26 platforms for 3D models and manage your printers!`, categories[3].Id, categories[1].Id, categories[2].Id, categories[4].Id)
+	topic, err := CreateTopic(system, &NewTopic{Title: "Welcome to MakerSpell Community!", Raw: raw, CategoryId: categories[0].Id})
 	if err != nil {
 		panic(err)
 	}

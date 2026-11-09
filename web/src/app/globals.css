@@ -4,14 +4,14 @@
 /* The look of a Discourse forum with its default theme: white header and sidebar, blue (#08c) links and buttons,
    gray text in shades of the primary color. Every color is a variable, redefined below for dark mode. */
 :root {
-  --primary: #222222;
+  --primary: #1e293b;
   --secondary: #ffffff;
-  --tertiary: #0088cc;
-  --quaternary: #e45735;
+  --tertiary: #2563eb;
+  --quaternary: #ec4899;
   --highlight: #ffff4d;
-  --danger: #c80001;
-  --success: #009900;
-  --love: #fa6c8d;
+  --danger: #ef4444;
+  --success: #10b981;
+  --love: #ec4899;
 
   --primary-very-low: color-mix(in srgb, var(--primary) 3%, var(--secondary));
   --primary-50: var(--primary-very-low);
@@ -30,25 +30,25 @@
   --primary-very-high: color-mix(in srgb, var(--primary) 85%, var(--secondary));
   --primary-900: var(--primary-very-high);
 
-  --tertiary-very-low: #e0f5ff;
-  --tertiary-low: #d1f0ff;
-  --tertiary-medium: #66ccff;
-  --tertiary-high: #1aadff;
-  --tertiary-hover: #006699;
-  --tertiary-50: #f0faff;
-  --highlight-bg: #ffffca;
-  --highlight-medium: #ffffa6;
-  --danger-low: #ffe0e0;
-  --danger-hover: #a00001;
-  --success-low: #b8ffb8;
-  --love-low: #feeaee;
-  --quaternary-low: #f7d5cc;
+  --tertiary-very-low: #eff6ff;
+  --tertiary-low: #dbeafe;
+  --tertiary-medium: #60a5fa;
+  --tertiary-high: #3b82f6;
+  --tertiary-hover: #1d4ed8;
+  --tertiary-50: #f8fafc;
+  --highlight-bg: #fef9c3;
+  --highlight-medium: #fef08a;
+  --danger-low: #fee2e2;
+  --danger-hover: #dc2626;
+  --success-low: #d1fae5;
+  --love-low: #fce7f3;
+  --quaternary-low: #fce7f3;
 
   --header_background: #ffffff;
-  --header_primary: #333333;
-  --header_primary-low-mid: #d0d0d0;
-  --header_primary-medium: #afafaf;
-  --header_primary-high: #929292;
+  --header_primary: #0f172a;
+  --header_primary-low-mid: #cbd5e1;
+  --header_primary-medium: #64748b;
+  --header_primary-high: #334155;
 
   --d-sidebar-width: 17em;
   --d-sidebar-background: var(--secondary);
@@ -56,7 +56,7 @@
   --d-sidebar-highlight-background: var(--primary-100);
   --d-hover: var(--primary-100);
   --d-selected: var(--tertiary-low);
-  --d-border-radius: 4px;
+  --d-border-radius: 8px;
   --d-max-width: 1110px;
   --header-offset: 4em;
 
@@ -88,30 +88,36 @@
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --primary: #dddddd;
-    --secondary: #222222;
-    --tertiary: #099dd7;
-    --quaternary: #c14924;
-    --highlight: #a87137;
-    --danger: #e45735;
-    --success: #1ca551;
-    --tertiary-very-low: #0d2f3d;
-    --tertiary-low: #10394a;
-    --tertiary-medium: #0e6c92;
-    --tertiary-high: #0a8bc0;
-    --tertiary-hover: #39b3e4;
-    --tertiary-50: #0b2632;
-    --highlight-bg: #3d3420;
-    --highlight-medium: #574520;
-    --danger-low: #4d2318;
-    --success-low: #1c4b2f;
-    --love-low: #4b2a32;
-    --quaternary-low: #4a2a20;
-    --header_background: #111111;
-    --header_primary: #dddddd;
-    --header_primary-low-mid: #5a5a5a;
-    --header_primary-medium: #7b7b7b;
-    --header_primary-high: #9b9b9b;
+    --primary: #f8fafc;
+    --secondary: #090a0e;
+    --tertiary: #3b82f6;
+    --quaternary: #ec4899;
+    --highlight: #f59e0b;
+    --danger: #ef4444;
+    --success: #10b981;
+    --love: #ec4899;
+    --tertiary-very-low: rgba(59, 130, 246, 0.1);
+    --tertiary-low: rgba(59, 130, 246, 0.18);
+    --tertiary-medium: #3b82f6;
+    --tertiary-high: #60a5fa;
+    --tertiary-hover: #93c5fd;
+    --tertiary-50: rgba(59, 130, 246, 0.05);
+    --highlight-bg: #451a03;
+    --highlight-medium: #78350f;
+    --danger-low: rgba(239, 68, 68, 0.15);
+    --success-low: rgba(16, 185, 129, 0.15);
+    --love-low: rgba(236, 72, 153, 0.15);
+    --quaternary-low: rgba(236, 72, 153, 0.15);
+    --header_background: #0c0d12;
+    --header_primary: #f8fafc;
+    --header_primary-low-mid: rgba(255, 255, 255, 0.12);
+    --header_primary-medium: #94a3b8;
+    --header_primary-high: #cbd5e1;
+    --d-sidebar-background: #0c0d12;
+    --d-sidebar-active-background: rgba(59, 130, 246, 0.16);
+    --d-sidebar-highlight-background: rgba(255, 255, 255, 0.06);
+    --d-hover: rgba(255, 255, 255, 0.06);
+    --d-selected: rgba(59, 130, 246, 0.16);
   }
 }
 
