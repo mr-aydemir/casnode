@@ -49,7 +49,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const site = await getSite();
   const locale = await getLocale();
   return (
-    <html lang={locale === "zh" ? "zh-CN" : "en"} suppressHydrationWarning>
+    <html lang={locale === "zh" ? "zh-CN" : locale} suppressHydrationWarning>
       <body>
         <Suspense fallback={null}>
           <TopProgressBar />
