@@ -69,6 +69,15 @@ export function SiteProvider({ initialSite, locale, children }: { initialSite: S
           // private windows may refuse storage; the user then lands on the home page
         }
       }
+      // Directly route through central MakerSpell ID when configured
+      const hasMakerSpell = site.authProviders?.some((p) => p.name === "makerspell");
+      if (hasMakerSpell) {
+        const returnTo = path + window.location.search;
+        const params = new URLSearchParams({ provider: "makerspell", return_to: returnTo });
+        window.location.assign(`/api/auth/start?${params.toString()}`);
+        return;
+      }
+
       const settings = site.settings ?? {};
       const localLogins = settings.enable_local_logins !== "false";
       const casdoorOnly = !localLogins && !!site.casdoor.serverUrl && !!site.casdoor.clientId && !site.authProviders?.length && !site.devSignin;
