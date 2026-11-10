@@ -1,4 +1,5 @@
 import "@fontsource-variable/inter";
+import { Suspense } from "react";
 import type { Metadata, Viewport } from "next";
 import { Toaster } from "sonner";
 import { Analytics } from "@/components/analytics";
@@ -7,6 +8,7 @@ import { ChatProvider } from "@/components/chat/chat-provider";
 import { Composer } from "@/components/composer";
 import { ComposerProvider } from "@/components/composer-provider";
 import { SiteHeader } from "@/components/header";
+import { TopProgressBar } from "@/components/top-progress-bar";
 import { KeyboardShortcuts } from "@/components/keyboard-shortcuts";
 import { LayoutStateProvider } from "@/components/layout-state";
 import { MainOutlet } from "@/components/main-outlet";
@@ -49,6 +51,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang={locale === "zh" ? "zh-CN" : "en"} suppressHydrationWarning>
       <body>
+        <Suspense fallback={null}>
+          <TopProgressBar />
+        </Suspense>
         <SiteProvider initialSite={site} locale={locale}>
           <BrandStyle />
           <LayoutStateProvider>
