@@ -46,7 +46,7 @@ var SettingDefs = []*SettingDef{
 	{Name: "site_description", Type: "string", Default: "Official community for 3D printing enthusiasts, makers, and creators.", Category: "required", Public: true},
 	{Name: "short_site_description", Type: "string", Default: "MakerSpell Community", Category: "required", Public: true},
 	{Name: "contact_email", Type: "string", Default: "support@makerspell.com", Category: "required", Public: true},
-	{Name: "site_url", Type: "string", Default: "https://community.makerspell.com", Category: "required", Public: true},
+	{Name: "site_url", Type: "string", Default: "https://forum.makerspell.com", Category: "required", Public: true},
 	{Name: "logo_url", Type: "string", Default: "/brand-logo.png", Category: "branding", Public: true},
 	{Name: "logo_small_url", Type: "string", Default: "/brand-logo.png", Category: "branding", Public: true},
 	{Name: "logo_dark_url", Type: "string", Default: "/brand-logo.png", Category: "branding", Public: true},
