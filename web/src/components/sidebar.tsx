@@ -12,8 +12,19 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { locales } from "@/lib/i18n";
 import { categoryUrl, isStaff, tagUrl, userUrl } from "@/lib/utils";
 
-function SectionLink({ href, active, prefix, children, badge, secondary }: { href: string; active: boolean; prefix: ReactNode; children: ReactNode; badge?: ReactNode; secondary?: boolean }) {
+function SectionLink({ href, active, prefix, children, badge, secondary, external }: { href: string; active?: boolean; prefix: ReactNode; children: ReactNode; badge?: ReactNode; secondary?: boolean; external?: boolean }) {
   const { hideSidebarOnMobile } = useLayoutState();
+  if (external) {
+    return (
+      <li className="sidebar-section-link-wrapper">
+        <a href={href} target="_blank" rel="noopener noreferrer" className={`sidebar-section-link${secondary ? " secondary" : ""}`} onClick={hideSidebarOnMobile}>
+          <span className="sidebar-section-link-prefix">{prefix}</span>
+          <span className="sidebar-section-link-content-text">{children}</span>
+          {badge}
+        </a>
+      </li>
+    );
+  }
   return (
     <li className="sidebar-section-link-wrapper">
       <Link href={href} className={`sidebar-section-link${active ? " active" : ""}${secondary ? " secondary" : ""}`} onClick={hideSidebarOnMobile}>
@@ -145,6 +156,56 @@ export function Sidebar() {
                 </DropdownMenuContent>
               </DropdownMenu>
             </li>
+          </Section>
+
+          {/* DOWNLOAD ON THE */}
+          <Section id="download" title={t("sidebar.downloadApp")}>
+            <SectionLink
+              href="https://play.google.com/store/apps/details?id=com.makerspell.app"
+              prefix={<Icon name="google" />}
+              external
+            >
+              {t("sidebar.playStore")}
+            </SectionLink>
+            <SectionLink
+              href="https://www.makerspell.com/download"
+              prefix={<Icon name="download" />}
+              external
+            >
+              {t("sidebar.windowsApp")}
+            </SectionLink>
+          </Section>
+
+          {/* RESOURCE */}
+          <Section id="resources" title={t("sidebar.resources")}>
+            <SectionLink
+              href="https://wiki.makerspell.com"
+              prefix={<Icon name="book" />}
+              external
+            >
+              {t("sidebar.wiki")}
+            </SectionLink>
+            <SectionLink
+              href="https://github.com/MakerSpell"
+              prefix={<Icon name="github" />}
+              external
+            >
+              {t("sidebar.github")}
+            </SectionLink>
+            <SectionLink
+              href="https://www.makerspell.com"
+              prefix={<Icon name="globe" />}
+              external
+            >
+              {t("sidebar.web")}
+            </SectionLink>
+            <SectionLink
+              href="https://www.makerspell.com/docs"
+              prefix={<Icon name="file-lines" />}
+              external
+            >
+              {t("sidebar.docs")}
+            </SectionLink>
           </Section>
 
           {/* the chat pages list the channels themselves */}
