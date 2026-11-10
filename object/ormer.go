@@ -173,6 +173,10 @@ func (a *Adapter) createTables() error {
 	for _, table := range tables {
 		err := a.Engine.Sync2(table)
 		if err != nil {
+			errStr := strings.ToLower(err.Error())
+			if strings.Contains(errStr, "already exists") || strings.Contains(errStr, "42p07") || strings.Contains(errStr, "42710") {
+				continue
+			}
 			return err
 		}
 	}
