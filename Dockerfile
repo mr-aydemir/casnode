@@ -13,6 +13,7 @@ COPY . .
 RUN CGO_ENABLED=0 go build -ldflags "-s -w" -o casnode .
 
 FROM node:22-alpine
+RUN apk add --no-cache ca-certificates curl tzdata
 WORKDIR /app
 COPY --from=backend /src/casnode ./
 COPY --from=backend /src/conf ./conf
