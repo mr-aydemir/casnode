@@ -240,6 +240,69 @@ Share your experience with your Prusa!`,
 	},
 }
 
+// createSeedTopic inserts a pinned starter topic for the seeder. It deliberately
+// bypasses CreateTopic's user-facing validation (min_topic_title_length etc.),
+// because model names such as "Creality K1" are shorter than the site's minimum
+// title length while still being the intended topic titles. Panicking there would
+// crash the whole forum on every boot.
+func createSeedTopic(user *User, title, raw string, categoryId int64) (*Topic, error) {
+	cooked := CookMarkdown(raw)
+	now := time.Now()
+	topic := &Topic{
+		Title:             title,
+		Slug:              Slugify(title),
+		UserId:            user.Id,
+		Archetype:         ArchetypeRegular,
+		Visible:           true,
+		CategoryId:        categoryId,
+		BumpedAt:          now,
+		LastPostedAt:      now,
+		LastPostUserId:    user.Id,
+		PostsCount:        1,
+		HighestPostNumber: 1,
+		ParticipantCount:  1,
+		PosterIds:         []int64{user.Id},
+		WordCount:         countWords(raw),
+		Excerpt:           cooked.Excerpt,
+		ImageUrl:          cooked.ImageUrl,
+		PinnedAt:          now,
+		PinnedGlobally:    false,
+	}
+	if _, err := adapter.Engine.Insert(topic); err != nil {
+		return nil, err
+	}
+
+	post := &Post{
+		TopicId:    topic.Id,
+		PostNumber: 1,
+		UserId:     user.Id,
+		Raw:        raw,
+		Cooked:     cooked.Html,
+		PostType:   PostTypeRegular,
+		Version:    1,
+	}
+	if _, err := adapter.Engine.Insert(post); err != nil {
+		return nil, err
+	}
+
+	incrCategory(topic.CategoryId, "topic_count", 1)
+	incrCategory(topic.CategoryId, "post_count", 1)
+	incrUser(user.Id, "topic_count", 1)
+	incrUser(user.Id, "post_count", 1)
+	_, _ = adapter.Engine.ID(user.Id).Cols("last_posted_at").Update(&User{LastPostedAt: now})
+
+	if err := SetTopicUser(user.Id, topic.Id, func(tu *TopicUser) {
+		tu.Posted = true
+		tu.LastReadPostNumber = 1
+		tu.NotificationLevel = NotificationLevelWatching
+	}); err != nil {
+		return nil, err
+	}
+
+	PublishLatest(topic, "created")
+	return topic, nil
+}
+
 // getSeedTopic returns the starter topic for a model name inside a brand category,
 // or nil when it has not been created yet.
 func getSeedTopic(title string, categoryId int64) (*Topic, error) {
@@ -257,7 +320,19 @@ func getSeedTopic(title string, categoryId int64) (*Topic, error) {
 // InitPrinterCategories seeds the printer brand subcategories under the hardware
 // category and a pinned starter topic per supported model. It is idempotent:
 // existing slugs are skipped, so re-running (e.g. on every deploy) is safe.
+//
+// Seeding is best-effort: a failure here must never prevent the forum from
+// booting (that used to take the whole site down with a panic loop).
 func InitPrinterCategories() {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Printf("[seed] printer category seeding aborted (non-fatal): %v\n", r)
+		}
+	}()
+	initPrinterCategories()
+}
+
+func initPrinterCategories() {
 	hardware, err := GetCategoryBySlug("hardware")
 	if err != nil {
 		panic(err)
@@ -309,15 +384,10 @@ func InitPrinterCategories() {
 			if existing != nil {
 				continue
 			}
-			topic, err := CreateTopic(system, &NewTopic{Title: model.Name, Raw: model.Raw, CategoryId: category.Id})
+			_, err = createSeedTopic(system, model.Name, model.Raw, category.Id)
 			if err != nil {
-				panic(err)
-			}
-			topic.PinnedAt = time.Now()
-			topic.PinnedGlobally = false
-			_, err = adapter.Engine.ID(topic.Id).Cols("pinned_at", "pinned_globally").Update(topic)
-			if err != nil {
-				panic(err)
+				fmt.Printf("[seed] skipping topic %q: %v\n", model.Name, err)
+				continue
 			}
 			createdTopics++
 		}
