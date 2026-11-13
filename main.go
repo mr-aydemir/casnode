@@ -32,6 +32,7 @@ func main() {
 	object.InitData()
 	object.InitFeatures()
 	object.InitPrinterCategories()
+	object.InitMakerSpellAuthProvider()
 
 	web.BConfig.WebConfig.Session.SessionOn = true
 	web.BConfig.WebConfig.Session.SessionName = "casnode_session_id"
