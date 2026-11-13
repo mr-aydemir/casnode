@@ -284,16 +284,33 @@ func normalizeCategory(category *Category) error {
 	if existing != nil && existing.Id != category.Id {
 		return fmt.Errorf("The slug %s is taken", category.Slug)
 	}
-	if category.ParentId == category.Id && category.Id != 0 {
-		return fmt.Errorf("A category can't be its own parent")
-	}
 	if category.ParentId != 0 {
+		if category.ParentId == category.Id {
+			return fmt.Errorf("A category can't be its own parent")
+		}
 		parent, err := GetCategory(category.ParentId)
 		if err != nil {
 			return err
 		}
-		if parent == nil || parent.ParentId != 0 {
-			return fmt.Errorf("The parent category must be a top-level category")
+		if parent == nil {
+			return fmt.Errorf("The parent category does not exist")
+		}
+		// Categories can be nested (e.g. hardware -> brand -> model). Walk up the
+		// chain to reject cycles; the root (ParentId == 0) must be reachable.
+		seen := map[int64]bool{category.Id: true}
+		for p := parent; p != nil && p.ParentId != 0; {
+			if seen[p.Id] {
+				return fmt.Errorf("The parent category chain contains a cycle")
+			}
+			seen[p.Id] = true
+			next, err := GetCategory(p.ParentId)
+			if err != nil {
+				return err
+			}
+			if next == nil {
+				return fmt.Errorf("The parent category does not exist")
+			}
+			p = next
 		}
 	}
 	return nil

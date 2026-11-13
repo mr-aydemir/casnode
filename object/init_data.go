@@ -55,7 +55,7 @@ func InitData() {
 		{Name: "Models & Showcases", Slug: "showcase", Color: "EC4899", TextColor: "FFFFFF", Position: 4,
 			Description: "Share your 3D prints, custom designs, and creative maker projects."},
 		{Name: "Site Feedback & Ideas", Slug: "site-feedback", Color: "64748B", TextColor: "FFFFFF", Position: 5,
-			Description: "Discussion about MakerSpell and MakerSync apps, features, and roadmap."},
+			Description: "Discussion about the MakerSpell platform, apps, features, and roadmap."},
 		{Name: "Staff", Slug: "staff", Color: "EF4444", TextColor: "FFFFFF", Position: 6, ReadRestricted: true,
 			Description: "Private category for staff discussions. Topics are only visible to admins and moderators."},
 	}
@@ -83,7 +83,7 @@ This is the gathering place for 3D printing enthusiasts, makers, hardware hacker
 - **Showcase Your Prints:** Share your latest 3D prints and models in [Models & Showcases](/c/showcase/%d).
 - **Hardware & Troubleshooting:** Ask questions and share tips for your Klipper, Creality, Snapmaker, Bambu, or Voron machines in [3D Printers & Hardware](/c/hardware/%d).
 - **Slicing & Optimization:** Discuss profiles, slicer settings, and OrcaSlicer integration in [Slicers & Software](/c/software/%d).
-- **MakerSpell & MakerSync Feedback:** Give feedback and feature requests in [Site Feedback](/c/site-feedback/%d).
+- **MakerSpell Feedback:** Give feedback and feature requests in [Site Feedback](/c/site-feedback/%d).
 
 > Visit [MakerSpell.com](https://www.makerspell.com) to search over 26 platforms for 3D models and manage your printers!`, categories[3].Id, categories[1].Id, categories[2].Id, categories[4].Id)
 	topic, err := CreateTopic(system, &NewTopic{Title: "Welcome to MakerSpell Community!", Raw: raw, CategoryId: categories[0].Id})
