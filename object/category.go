@@ -431,23 +431,41 @@ func GetUncategorizedId() int64 {
 	return int64(id)
 }
 
-// SortCategoriesForDisplay puts each subcategory right after its parent.
+// SortCategoriesForDisplay puts each subcategory right after its parent, supporting any depth
+// (e.g. root hardware -> brand -> model).
 func SortCategoriesForDisplay(categories []*Category) []*Category {
-	res := []*Category{}
-	parents := []*Category{}
+	res := make([]*Category, 0, len(categories))
+	byParent := make(map[int64][]*Category)
 	for _, category := range categories {
-		if category.ParentId == 0 {
-			parents = append(parents, category)
+		byParent[category.ParentId] = append(byParent[category.ParentId], category)
+	}
+
+	for _, list := range byParent {
+		sort.SliceStable(list, func(i, j int) bool { return list[i].Position < list[j].Position })
+	}
+
+	var appendHierarchy func(parentId int64)
+	appendHierarchy = func(parentId int64) {
+		for _, child := range byParent[parentId] {
+			res = append(res, child)
+			appendHierarchy(child.Id)
 		}
 	}
-	sort.SliceStable(parents, func(i, j int) bool { return parents[i].Position < parents[j].Position })
-	for _, parent := range parents {
-		res = append(res, parent)
-		for _, category := range categories {
-			if category.ParentId == parent.Id {
-				res = append(res, category)
+
+	appendHierarchy(0)
+
+	// In case of any orphaned categories, append them at the end so nothing is lost.
+	if len(res) < len(categories) {
+		seen := make(map[int64]bool, len(res))
+		for _, c := range res {
+			seen[c.Id] = true
+		}
+		for _, c := range categories {
+			if !seen[c.Id] {
+				res = append(res, c)
 			}
 		}
 	}
+
 	return res
 }
